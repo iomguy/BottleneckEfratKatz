@@ -42,7 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arc.cs" />
     <Compile Include="BinarySearch.cs" />
+    <Compile Include="Dot.cs" />
+    <Compile Include="Graph.cs" />
+    <Compile Include="PersDiagram.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

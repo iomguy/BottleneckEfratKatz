@@ -1,0 +1,48 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace BottleneckEfratKatz
+{
+    public class Graph
+    {
+        public Graph() ///конструктор
+        {
+            ///тут построить _arcsDict
+            ///
+            ArcsList = new List<Arc>(); //тут стоит использовать массив
+            DistI    = new List<double>();
+        }
+
+        private List<Arc> _arcsList;
+        private List<double> _distI;
+
+        public List<Arc> ArcsList { get => _arcsList; set => _arcsList = value; }
+        public List<double> DistI { get => _distI;    set => _distI    = value; }
+
+        ///тут хранятся расстояния в графе G по возрастанию и без повторений
+
+        public void BuildAllDistGraph(PersDiagram A, PersDiagram B) 
+            //строит словарь дуг и расстояний для всех точек A со всеми точками B (по возрастанию)
+        {
+            foreach (Dot dotA in A.DotList)
+            {
+                foreach (Dot dotB in B.DotList)
+                {
+                    Arc arcAB = new Arc(dotA, dotB);
+
+                    ArcsList.Add(arcAB);
+                    if (!(DistI.Contains(arcAB.Distance))) ///добавляем расстояние, если такого ещё не было
+                        DistI.Add(arcAB.Distance);
+                }
+            }
+            DistI.Sort();
+        }
+
+        public void BuildGraphGdistI(Graph G, int i)
+            //обновляет граф G[dist(i)], фильтруя самый большой граф G в зависимости от значения i
+        {
+            //ArcsList = G.ArcsList.Where(x => (x.Value <= G.DistI[i+1])).ToDictionary(x => x.Key, x => x.Value);
+            ArcsList = G.ArcsList.Where(x => (x.Distance <= G.DistI[i - 1])).ToList();
+        }
+    }
+}
