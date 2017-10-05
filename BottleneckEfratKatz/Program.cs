@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Linq;
+using BinSearch;
 
 namespace BottleneckEfratKatz
 {
@@ -173,6 +174,7 @@ namespace BottleneckEfratKatz
             graphG.BuildAllDistGraph(AcupB, BcupA); ///строим граф связей и размеров из всез точек AcupB во все точки BcupA
             graphGdistI = new Graph();
             graphGdistI.BuildGraphGdistI(graphG, 10); //возможно, нужно будет унаследовать отдельный тип для graphGdistI и хранить при нём значение i
+            int? index = BinS.BinarySearch(graphG.DistI, BinS.LoopDelegate); //ищем в списке возможных дистанций ту, которая удовлетворяет условию LoopDelegate
         }
 
 
@@ -194,8 +196,8 @@ namespace BottleneckEfratKatz
         public Graph graphG; ///граф G всех вершин со всеми + расстояния
         public Graph graphGdistI; ///граф G[dist(i)] вершин, расстояния которых не превышают i-е расстояние из всех возможных
 
-        public bool rLessOrEqual(int i)
-            //возвращает true, если ответ меньше или равен текущему состоянию
+        //public bool rLessOrEqual(int i);
+        //    //возвращает true, если ответ меньше или равен текущему состоянию
         public PersDiagram PersDiagramCup(PersDiagram persDiagramA, PersDiagram persDiagramB)
             //создаёт объединение (с учётом кратностей) множества и и множества проекций
         {

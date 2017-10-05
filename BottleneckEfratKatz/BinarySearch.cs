@@ -6,20 +6,21 @@ using System.Threading.Tasks;
 
 namespace BinSearch
 {
-    class Program
+    class BinS
     {
-        static void Main(string[] args)
-        {
-            Func<int, bool> LoopDelegate = Loop;
+        //static void Main(string[] args)
+        //{
+        //    Func<int, bool> LoopDelegate = Loop;
 
-            List<int> a = new List<int>() { 1, 3, 5, 7, 9 };
-            Console.WriteLine("Ищем  6: {0}", BinarySearch(a, LoopDelegate));
-            Console.ReadLine();
-        }
+        //    List<int> a = new List<int>() { 1, 3, 5, 7, 9 };
+        //    Console.WriteLine("Ищем  6: {0}", BinarySearch(a, LoopDelegate));
+        //    Console.ReadLine();
+        //}
+        public static Func<double, bool> LoopDelegate = Loop;
 
-        private static bool Loop(int y)
+        private static bool Loop(double y)
         {
-            bool answer = (6 <= y) ? true : false;
+            bool answer = (0.02 <= y) ? true : false;
             return answer;
         }
 
@@ -31,7 +32,7 @@ namespace BinSearch
         /// <param name="a">Отсортированный по возрастанию массив типа int[]</param>
         /// <param name="x">Искомый элемент.</param>
         /// <returns>Возвращает индекс искомого элемента либо null, если элемент не найден.</returns>
-        private static int? BinarySearch(List<int> a, Func<int, bool> Loop)
+        public static int? BinarySearch(List<double> a, Func<double, bool> Loop)
         {
             // Проверить, имеет ли смыл вообще выполнять поиск:
             // - если длина массива равна нулю - искать нечего;
