@@ -23,7 +23,7 @@ namespace BottleneckEfratKatz
             graphG = new Graph();
             graphG.BuildAllDistGraph(AcupB, BcupA); ///строим граф связей и размеров из всез точек AcupB во все точки BcupA
             graphGdistI = new Graph();
-            graphGdistI.BuildGraphGdistI(graphG, 10); //возможно, нужно будет унаследовать отдельный тип для graphGdistI и хранить при нём значение i
+            graphGdistI.BuildGraphGdistI(graphG, 3); //возможно, нужно будет унаследовать отдельный тип для graphGdistI и хранить при нём значение i
             int? index = BinS.BinarySearch(graphG.DistI, BinS.LoopDelegate); //ищем в списке возможных дистанций ту, которая удовлетворяет условию LoopDelegate
         }
 
@@ -54,14 +54,15 @@ namespace BottleneckEfratKatz
             PersDiagram persDiagramResult = new PersDiagram();
             foreach (Dot dot in persDiagramA.DotList)
             {
-                Dot projectedDot = new Dot(dot.BirthTime, dot.DeathTime, dot.SourceMult); ///копируем первую персистентную диаграмму
-                persDiagramResult.AddDot(projectedDot);
+                Dot nonProjectedDot = new Dot(dot.BirthTime, dot.DeathTime, dot.SourceMult); ///копируем первую персистентную диаграмму                
+                persDiagramResult.AddDot(nonProjectedDot);
             }
 
             foreach (Dot dot in persDiagramB.DotList)
             {
                 var diagCoord = (dot.BirthTime + dot.DeathTime) / 2; ///координата проекции на диагональ
                 Dot projectedDot = new Dot(diagCoord, diagCoord, dot.SourceMult);
+                projectedDot.ProjectedFrom.Add(dot); ///сохраняем в свойстве projectedDot тот факт, что dot спроецирована на projectedDot
                 persDiagramResult.AddDot(projectedDot);
             }
             return persDiagramResult;
@@ -95,12 +96,13 @@ namespace BottleneckEfratKatz
                         var birth = double.Parse(data[0]);
                         var death = double.Parse(data[1]);
 
-                        Dot addedDot = new Dot(birth, death); ///создаём точку с единичной кратностью
-                        persD.AddDot(addedDot);              ///добавляем её в перс диаграмму, с учётом повторений меняется кратность
+                        if (birth != death) ///сейчас учитываем только недиагональные точки
+                        {
+                            Dot addedDot = new Dot(birth, death); ///создаём точку с единичной кратностью
+                            persD.AddDot(addedDot);              ///добавляем её в перс диаграмму, с учётом повторений меняется кратность                            
+                        }
                         line = ReadLine(reader);
-
                     }
-
                     return persD;
                 }
             }

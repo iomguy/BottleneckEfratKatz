@@ -12,7 +12,7 @@ namespace BottleneckEfratKatz
         }
 
         private List<Dot> _dotList; /// список точек с кратностями
-        public List<Dot> DotList { get => _dotList;       set => _dotList = value; }
+        public  List<Dot> DotList { get => _dotList;       set => _dotList = value; }
 
         public int SourceSize() 
             //считает размер с учётом исходных кратностей персистентной диаграммы

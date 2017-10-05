@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BottleneckEfratKatz
 {
@@ -10,6 +11,7 @@ namespace BottleneckEfratKatz
             BirthTime = birth;
             DeathTime = death;
             SourceMult = mult;
+            ProjectedFrom = new List<Dot>(); ///по умолчанию точка - не с диагонали, если да - то список будет заполняться при проецировании дургих точек на диагональную
         }
 
         private double _birthTime;
@@ -17,22 +19,35 @@ namespace BottleneckEfratKatz
         private int _sourceMult; ///исходная кратность
         private int _currMult;  ///текущая кратность
 
+        private List<Dot> _projectedFrom; /// если пустой, то это точка не с диагонали
+                                         /// если не пустой - то точка с диагонали, а элементы - те точки, проекцией которых она является
         public int SourceMult
         {
             get { return _sourceMult; } ///читаем исходную кратность
             set { _sourceMult = value; CurrMult = value; } ///задаём исходную и => текущую кратность
         }
 
-        public double BirthTime { get => _birthTime; set => _birthTime = value; }
-        public double DeathTime { get => _deathTime; set => _deathTime = value; }
-        public int    CurrMult  { get => _currMult;  set => _currMult  = value; }
+        public double BirthTime        { get => _birthTime;     set => _birthTime     = value; }
+        public double DeathTime        { get => _deathTime;     set => _deathTime     = value; }
+        public int    CurrMult         { get => _currMult;      set => _currMult      = value; }
+        public List<Dot> ProjectedFrom { get => _projectedFrom; set => _projectedFrom = value; }
 
         public static double Distance(Dot parent, Dot inherior)
         {
             try
             {
-                double result = Math.Sqrt(Math.Pow((parent.BirthTime - inherior.BirthTime), 2) + Math.Pow((parent.DeathTime - inherior.DeathTime), 2));
-                return result;
+                if (parent.ProjectedFrom.Count == 0 && ///если оба элемента не диагональные, иначе расстояние равно нулю
+                    inherior.ProjectedFrom.Count == 0)
+                {
+                    double result = Math.Max(Math.Abs(parent.BirthTime - inherior.BirthTime), Math.Abs(parent.DeathTime - inherior.DeathTime)); /// max{|birth1 - birth2|, |death1 - death2|}
+                    return result;
+                }
+                else
+                {
+                    double result = 0.0;
+                    return result;
+                }
+                    
             }
             catch (Exception e)
             {
