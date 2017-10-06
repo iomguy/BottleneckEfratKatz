@@ -32,16 +32,18 @@ namespace BottleneckEfratKatz
             return index;
         }
 
-        public void AddDot(Dot dot) 
+        public Dot AddDot(Dot dot) 
             //добавляет точку с некоторой кратностью с учётом того, что такая точка уже может быть
         {
             int repeatedString = indexOfBirthDeath(dot.BirthTime, dot.DeathTime);
             if (repeatedString == -1)        ///если такая строка ещё не попадалась
             {
-                DotList.Add(dot);            /// доабавляем новую точку в перс диаграмму
+                DotList.Add(dot);            /// добавляем новую точку в перс диаграмму
+                return dot;                ///возвращаем ссылку на эту же точку, если она ещё не встречалась
             }
             else
                 DotList[repeatedString].SourceMult += dot.SourceMult; ///точку не добавляем, увеличиваем кратность, если попадалась
+                return DotList[repeatedString];                     ///возвращаем ссылку на точку, кратность которой увеличиваем
         }
 
         public static PersDiagram PersDiagramCup(PersDiagram persDiagramA, PersDiagram persDiagramB)
@@ -52,15 +54,16 @@ namespace BottleneckEfratKatz
             {
                 ///Dot nonProjectedDot = new Dot(dot.BirthTime, dot.DeathTime, dot.SourceMult); ///копируем первую персистентную диаграмму                
                 Dot nonProjectedDot = dot; ///ссылаемся на первую персистентную диаграмму  
-                persDiagramResult.AddDot(nonProjectedDot);
+                Dot toDot = persDiagramResult.AddDot(nonProjectedDot);
             }
 
             foreach (Dot dot in persDiagramB.DotList)
             {
                 var diagCoord = (dot.BirthTime + dot.DeathTime) / 2; ///координата проекции на диагональ
                 Dot projectedDot = new Dot(diagCoord, diagCoord, dot.SourceMult);
-                projectedDot.ProjectedFrom.Add(dot); ///сохраняем в свойстве projectedDot тот факт, что dot спроецирована на projectedDot
-                persDiagramResult.AddDot(projectedDot);
+                
+                Dot toDot = persDiagramResult.AddDot(projectedDot);
+                toDot.ProjectedFrom.Add(dot); ///сохраняем в свойстве toDot (на которую в итоге спроецировали) тот факт, что dot спроецирована на toDot
             }
             return persDiagramResult;
         }

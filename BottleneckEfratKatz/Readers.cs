@@ -37,7 +37,7 @@ namespace BottleneckEfratKatz
                         if (birth != death) ///сейчас учитываем только недиагональные точки
                         {
                             Dot addedDot = new Dot(birth, death); ///создаём точку с единичной кратностью
-                            persD.AddDot(addedDot);              ///добавляем её в перс диаграмму, с учётом повторений меняется кратность                            
+                            Dot toDot = persD.AddDot(addedDot);              ///добавляем её в перс диаграмму, с учётом повторений меняется кратность                            
                         }
                         line = ReadLine(reader);
                     }
