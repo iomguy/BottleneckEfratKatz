@@ -54,7 +54,8 @@ namespace BottleneckEfratKatz
             PersDiagram persDiagramResult = new PersDiagram();
             foreach (Dot dot in persDiagramA.DotList)
             {
-                Dot nonProjectedDot = new Dot(dot.BirthTime, dot.DeathTime, dot.SourceMult); ///копируем первую персистентную диаграмму                
+                ///Dot nonProjectedDot = new Dot(dot.BirthTime, dot.DeathTime, dot.SourceMult); ///копируем первую персистентную диаграмму                
+                Dot nonProjectedDot = dot; ///ссылаемся на первую персистентную диаграмму  
                 persDiagramResult.AddDot(nonProjectedDot);
             }
 
