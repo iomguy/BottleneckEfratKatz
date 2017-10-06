@@ -43,7 +43,28 @@ namespace BottleneckEfratKatz
             else
                 DotList[repeatedString].SourceMult += dot.SourceMult; ///точку не добавляем, увеличиваем кратность, если попадалась
         }
-                
+
+        public static PersDiagram PersDiagramCup(PersDiagram persDiagramA, PersDiagram persDiagramB)
+        //создаёт объединение (с учётом кратностей) множества и и множества проекций
+        {
+            PersDiagram persDiagramResult = new PersDiagram();
+            foreach (Dot dot in persDiagramA.DotList)
+            {
+                ///Dot nonProjectedDot = new Dot(dot.BirthTime, dot.DeathTime, dot.SourceMult); ///копируем первую персистентную диаграмму                
+                Dot nonProjectedDot = dot; ///ссылаемся на первую персистентную диаграмму  
+                persDiagramResult.AddDot(nonProjectedDot);
+            }
+
+            foreach (Dot dot in persDiagramB.DotList)
+            {
+                var diagCoord = (dot.BirthTime + dot.DeathTime) / 2; ///координата проекции на диагональ
+                Dot projectedDot = new Dot(diagCoord, diagCoord, dot.SourceMult);
+                projectedDot.ProjectedFrom.Add(dot); ///сохраняем в свойстве projectedDot тот факт, что dot спроецирована на projectedDot
+                persDiagramResult.AddDot(projectedDot);
+            }
+            return persDiagramResult;
+        }
+
         ///нужно создать метод, который будет выдавать элементы с ненулевыми кратностями
         ///
     }

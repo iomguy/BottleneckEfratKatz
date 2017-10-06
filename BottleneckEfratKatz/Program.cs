@@ -14,8 +14,8 @@ namespace BottleneckEfratKatz
             _filenameB = filenameB;
             _inpA = ReadPersDiag(_filenameA); //выдели в отдельные классы
             _inpB = ReadPersDiag(_filenameB); //выдели в отдельные классы
-            AcupB = PersDiagramCup(_inpA, _inpB);
-            BcupA = PersDiagramCup(_inpB, _inpA);
+            AcupB = PersDiagram.PersDiagramCup(_inpA, _inpB);
+            BcupA = PersDiagram.PersDiagramCup(_inpB, _inpA);
             _inpAsize = _inpA.SourceSize();
             _inpBsize = _inpB.SourceSize();
             _inpAcupBsize = AcupB.SourceSize();
@@ -48,26 +48,6 @@ namespace BottleneckEfratKatz
 
         //public bool rLessOrEqual(int i);
         //    //возвращает true, если ответ меньше или равен текущему состоянию
-        public PersDiagram PersDiagramCup(PersDiagram persDiagramA, PersDiagram persDiagramB)
-            //создаёт объединение (с учётом кратностей) множества и и множества проекций
-        {
-            PersDiagram persDiagramResult = new PersDiagram();
-            foreach (Dot dot in persDiagramA.DotList)
-            {
-                ///Dot nonProjectedDot = new Dot(dot.BirthTime, dot.DeathTime, dot.SourceMult); ///копируем первую персистентную диаграмму                
-                Dot nonProjectedDot = dot; ///ссылаемся на первую персистентную диаграмму  
-                persDiagramResult.AddDot(nonProjectedDot);
-            }
-
-            foreach (Dot dot in persDiagramB.DotList)
-            {
-                var diagCoord = (dot.BirthTime + dot.DeathTime) / 2; ///координата проекции на диагональ
-                Dot projectedDot = new Dot(diagCoord, diagCoord, dot.SourceMult);
-                projectedDot.ProjectedFrom.Add(dot); ///сохраняем в свойстве projectedDot тот факт, что dot спроецирована на projectedDot
-                persDiagramResult.AddDot(projectedDot);
-            }
-            return persDiagramResult;
-        }
 
 
         public static string ReadLine(StreamReader reader)
