@@ -36,7 +36,7 @@ namespace BottleneckEfratKatz
         {
             try
             {
-                if (parent.ProjectedFrom.Count == 0 && ///если оба элемента не диагональные, иначе расстояние равно нулю
+                if (parent.ProjectedFrom.Count == 0 || ///если хотя бы один элемент не диагональный, иначе расстояние равно нулю
                     inherior.ProjectedFrom.Count == 0)
                 {
                     double result = Math.Max(Math.Abs(parent.BirthTime - inherior.BirthTime), Math.Abs(parent.DeathTime - inherior.DeathTime)); /// max{|birth1 - birth2|, |death1 - death2|}
