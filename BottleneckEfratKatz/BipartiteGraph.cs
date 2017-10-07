@@ -49,14 +49,14 @@ namespace BottleneckEfratKatz
             DistI.Sort();
         }
 
-        public HashSet<Dot> HashSetFilter(Dot dot1, HashSet<Dot> SetEdgesFromDot1, double r)
+        public HashSet<Dot> HashSetFilter(Dot dotLeft, HashSet<Dot> SetEdgesFromDotLeft, double r)
             //создаёт для dot1 новый HashSet из точек, расстояние до которых не > r, чтобы затем добавить это всё в EdgesDict
         {
-            var result = new HashSet <Dot>(SetEdgesFromDot1);
-            foreach (Dot dot2 in SetEdgesFromDot1)
+            var result = new HashSet <Dot>(SetEdgesFromDotLeft);
+            foreach (Dot dotRight in SetEdgesFromDotLeft)
             {
-                if (Dot.Distance(dot1,dot2) > r)
-                    result.Remove(dot2);
+                if (Dot.Distance(dotLeft,dotRight) > r)
+                    result.Remove(dotRight);
             }
 
             if (result.Count() == 0)
@@ -82,16 +82,22 @@ namespace BottleneckEfratKatz
             catch (Exception)
             {
                 throw new Exception("У точки из left не осталось рёбер");
-            }
-            
-
+            }          
         }
 
-        //public static HashSet<int> Edge(int i)
-        //{
-        //    bool answer = (0.02 <= y) ? true : false;
-        //    return answer;
-        //}
+        public HashSet<int> Edge(int i)
+            //будет применяться к GdistI, по индексу точки из left будет выдавать индексы точек из right, до которых есть рёбра через точки
+        {
+            Dot dotLeft            = Left.DictIndex[i];
+            HashSet<Dot> setOfDotsRight = EdgesDict[dotLeft];
+            HashSet<int> SetOfIndexRight = new HashSet<int>();
+
+            foreach (Dot dotRight in setOfDotsRight)
+            {
+                SetOfIndexRight.UnionWith(dotRight.SetOfIndex);
+            }                
+            return SetOfIndexRight;
+        }
     }
 
 }
