@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace BottleneckEfratKatz
 {
@@ -8,14 +9,14 @@ namespace BottleneckEfratKatz
         public BipartiteGraph() ///конструктор
             :base()
         {
-            
+
         }
 
         private PersDiagram _left; ///вершины левого слоя двудольного графа
         private PersDiagram _right; ///вершины правого слоя двудольного графа
 
-        public PersDiagram Left  { get => _left;  set => _left  = value; }
-        public PersDiagram Right { get => _right; set => _right = value; }
+        public PersDiagram Left     { get => _left;            set => _left            = value; }
+        public PersDiagram Right    { get => _right;           set => _right           = value; }
 
         public void BuildAllDistGraph(PersDiagram A, PersDiagram B)
         //строит словарь дуг и список расстояний для всех точек A со всеми точками B (по возрастанию)
@@ -57,6 +58,14 @@ namespace BottleneckEfratKatz
                 if (Dot.Distance(dot1,dot2) > r)
                     result.Remove(dot2);
             }
+
+            if (result.Count() == 0)
+            {
+                throw new Exception("У точки из left не осталось рёбер");
+            }
+                
+             /// если у какой-то точки из left не осталось рёбер, то мы точно не найдём идеальное паросочетание, нужно увеличивать расстояние
+                                                                   /// граф можно не достраивать
             return result;
         }
 
@@ -64,9 +73,18 @@ namespace BottleneckEfratKatz
             //обновляет граф G[dist(i)], фильтруя самый большой граф G в зависимости от значения i
         {
             //ArcsList = G.ArcsList.Where(x => (x.Value <= G.DistI[i+1])).ToDictionary(x => x.Key, x => x.Value);
-            double r = G.DistI[i - 1];
-            ArcsList  = G.ArcsList.Where(x => (x.Distance <= r)).ToList();
-            EdgesDict = G.EdgesDict.ToDictionary(x => x.Key, x => HashSetFilter(x.Key, x.Value, r));
+            try
+            {
+                double r = G.DistI[i - 1];
+                ArcsList = G.ArcsList.Where(x => (x.Distance <= r)).ToList();
+                EdgesDict = G.EdgesDict.ToDictionary(x => x.Key, x => HashSetFilter(x.Key, x.Value, r));
+            }
+            catch (Exception)
+            {
+                throw new Exception("У точки из left не осталось рёбер");
+            }
+            
+
         }
 
         //public static HashSet<int> Edge(int i)

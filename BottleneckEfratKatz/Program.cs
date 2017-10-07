@@ -30,7 +30,7 @@ namespace BottleneckEfratKatz
             graphG = new BipartiteGraph();
             graphG.BuildAllDistGraph(AcupB, BcupA); ///строим граф связей и размеров из всез точек AcupB во все точки BcupA
             graphGdistI = new BipartiteGraph();
-            graphGdistI.BuildGraphGdistI(graphG, 3); //возможно, нужно будет унаследовать отдельный тип для graphGdistI и хранить при нём значение i
+            graphGdistI.BuildGraphGdistI(graphG, 140); //возможно, нужно будет унаследовать отдельный тип для graphGdistI и хранить при нём значение i
             int? index = BinS.BinarySearch(graphG.DistI, BinS.LoopDelegate); //ищем в списке возможных дистанций ту, которая удовлетворяет условию LoopDelegate
 
         }             
