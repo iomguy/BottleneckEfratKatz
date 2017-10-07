@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Arc.cs" />
     <Compile Include="BinarySearch.cs" />
+    <Compile Include="BipartiteGraph.cs" />
     <Compile Include="Dot.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="HopcroftKarp.cs" />

@@ -27,9 +27,9 @@ namespace BottleneckEfratKatz
             AcupB.BuildDictIndex(); ///соответствие между точками и индексами
             BcupA.BuildDictIndex(_inpAcupBsize + 1);
 
-            graphG = new Graph();
+            graphG = new BipartiteGraph();
             graphG.BuildAllDistGraph(AcupB, BcupA); ///строим граф связей и размеров из всез точек AcupB во все точки BcupA
-            graphGdistI = new Graph();
+            graphGdistI = new BipartiteGraph();
             graphGdistI.BuildGraphGdistI(graphG, 3); //возможно, нужно будет унаследовать отдельный тип для graphGdistI и хранить при нём значение i
             int? index = BinS.BinarySearch(graphG.DistI, BinS.LoopDelegate); //ищем в списке возможных дистанций ту, которая удовлетворяет условию LoopDelegate
 
@@ -48,8 +48,8 @@ namespace BottleneckEfratKatz
         public PersDiagram AcupB;
         public PersDiagram BcupA;
 
-        public Graph graphG; ///граф G всех вершин со всеми + расстояния
-        public Graph graphGdistI; ///граф G[dist(i)] вершин, расстояния которых не превышают i-е расстояние из всех возможных
+        public BipartiteGraph graphG; ///граф G всех вершин со всеми + расстояния
+        public BipartiteGraph graphGdistI; ///граф G[dist(i)] вершин, расстояния которых не превышают i-е расстояние из всех возможных
 
         //public bool rLessOrEqual(int i);
         //    //возвращает true, если ответ меньше или равен текущему состоянию              

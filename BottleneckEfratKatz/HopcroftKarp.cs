@@ -32,6 +32,8 @@ namespace BottleneckEfratKatz
         //    }
         //}
 
+        //public static Func<int, HashSet<int>> EdgeDelegate = Graph.Edge;
+
         // BFS
         static bool HasAugmentingPath(IEnumerable<int> lefts,
                                              IReadOnlyDictionary<int, HashSet<int>> edges,
