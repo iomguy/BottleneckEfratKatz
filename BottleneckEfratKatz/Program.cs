@@ -78,7 +78,7 @@ namespace BottleneckEfratKatz
                 [5] = new HashSet<int> { 164557, 164556 }
             };
 
-            var matches = HopcroftKarp.HopcroftKarpFunction(lefts, rights, edges);
+            var matches = HopcroftKarp.HopcroftKarpFunction(lefts, rights, PersDiagrs.graphGdistI);
 
             Console.WriteLine($"# of matches: {matches.Count}\n");
 

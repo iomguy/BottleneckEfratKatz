@@ -69,15 +69,17 @@ namespace BottleneckEfratKatz
             return result;
         }
 
-        public void BuildGraphGdistI(Graph G, int i)
+        public void BuildGraphGdistI(BipartiteGraph G, int i)
             //обновляет граф G[dist(i)], фильтруя самый большой граф G в зависимости от значения i
         {
             //ArcsList = G.ArcsList.Where(x => (x.Value <= G.DistI[i+1])).ToDictionary(x => x.Key, x => x.Value);
             try
             {
-                double r = G.DistI[i - 1];
-                ArcsList = G.ArcsList.Where(x => (x.Distance <= r)).ToList();
+                double r  = G.DistI[i - 1];
+                ArcsList  = G.ArcsList.Where(x => (x.Distance <= r)).ToList();
                 EdgesDict = G.EdgesDict.ToDictionary(x => x.Key, x => HashSetFilter(x.Key, x.Value, r));
+                Left      = G.Left;
+                Right     = G.Right;
             }
             catch (Exception)
             {

@@ -32,11 +32,11 @@ namespace BottleneckEfratKatz
         //    }
         //}
 
-        //public static Func<int, HashSet<int>> EdgeDelegate = Graph.Edge;
+        //public static Func<int, HashSet<int>> EdgeDelegate = BipartiteGraph.Edge;
 
         // BFS
         static bool HasAugmentingPath(IEnumerable<int> lefts,
-                                             IReadOnlyDictionary<int, HashSet<int>> edges,
+                                             BipartiteGraph G,
                                              IReadOnlyDictionary<int, int> toMatchedRight,
                                              IReadOnlyDictionary<int, int> toMatchedLeft,
                                              IDictionary<int, long> distances,
@@ -63,7 +63,7 @@ namespace BottleneckEfratKatz
 
                 if (distances[left] < distances[0])
                 {
-                    foreach (var right in edges[left])
+                    foreach (var right in G.Edge(left))
                     {
                         var nextLeft = toMatchedLeft[right];
                         if (distances[nextLeft] == long.MaxValue)
@@ -81,7 +81,7 @@ namespace BottleneckEfratKatz
 
         // DFS
         static bool TryMatching(int left,
-                                       IReadOnlyDictionary<int, HashSet<int>> edges,
+                                       BipartiteGraph G,
                                        IDictionary<int, int> toMatchedRight,
                                        IDictionary<int, int> toMatchedLeft,
                                        IDictionary<int, long> distances)
@@ -91,12 +91,12 @@ namespace BottleneckEfratKatz
                 return true;
             }
 
-            foreach (var right in edges[left])
+            foreach (var right in G.Edge(left))
             {
                 var nextLeft = toMatchedLeft[right];
                 if (distances[nextLeft] == distances[left] + 1)
                 {
-                    if (TryMatching(nextLeft, edges, toMatchedRight, toMatchedLeft, distances))
+                    if (TryMatching(nextLeft, G, toMatchedRight, toMatchedLeft, distances))
                     {
                         toMatchedLeft[right] = left;
                         toMatchedRight[left] = right;
@@ -113,7 +113,7 @@ namespace BottleneckEfratKatz
 
         public static Dictionary<int, int> HopcroftKarpFunction(HashSet<int> lefts,
                                                               IEnumerable<int> rights,
-                                                              IReadOnlyDictionary<int, HashSet<int>> edges)
+                                                              BipartiteGraph G)
         {
             // "distance" is from a starting left to another left when zig-zaging left, right, left, right, left in DFS.
 
@@ -144,11 +144,11 @@ namespace BottleneckEfratKatz
             // Using either of them is enough but inefficient
             // because a dictionary cannot be straightforwardly looked up bi-directionally.
 
-            while (HasAugmentingPath(lefts, edges, toMatchedRight, toMatchedLeft, distances, q))
+            while (HasAugmentingPath(lefts, G, toMatchedRight, toMatchedLeft, distances, q))
             {
                 foreach (var unmatchedLeft in lefts.Where(left => toMatchedRight[left] == 0))
                 {
-                    TryMatching(unmatchedLeft, edges, toMatchedRight, toMatchedLeft, distances);
+                    TryMatching(unmatchedLeft, G, toMatchedRight, toMatchedLeft, distances);
                 }
             }
 
