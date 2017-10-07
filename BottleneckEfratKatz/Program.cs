@@ -10,14 +10,20 @@ namespace BottleneckEfratKatz
         {
             _filenameA = filenameA;
             _filenameB = filenameB;
+
             _inpA = Readers.ReadPersDiag(_filenameA); //выдели в отдельные классы
             _inpB = Readers.ReadPersDiag(_filenameB); //выдели в отдельные классы
+
             AcupB = PersDiagram.PersDiagramCup(_inpA, _inpB);
             BcupA = PersDiagram.PersDiagramCup(_inpB, _inpA);
+
+            AcupB.BuildDictIndex(); ///словарь вида 
+
             _inpAsize = _inpA.SourceSize();
             _inpBsize = _inpB.SourceSize();
             _inpAcupBsize = AcupB.SourceSize();
             _inpBcupAsize = BcupA.SourceSize();
+
             graphG = new Graph();
             graphG.BuildAllDistGraph(AcupB, BcupA); ///строим граф связей и размеров из всез точек AcupB во все точки BcupA
             graphGdistI = new Graph();

@@ -3,16 +3,20 @@
 namespace BottleneckEfratKatz
 {
     public class PersDiagram 
-        //список из точек персистентной диаграммы с кратностями
+        // список из точек персистентной диаграммы с кратностями
         // отдельный тип создаётся, т.к. все операции добавления и вычитания элементов должны вестись с обновлением кратностей
     {
         public PersDiagram() ///конструктор
         {
             DotList = new List<Dot>(); //тут стоит использовать массив
+            DictIndex = new Dictionary<int, Dot>(); ///словарь { целочисленный индекс : точка}
         }
 
         private List<Dot> _dotList; /// список точек с кратностями
-        public  List<Dot> DotList { get => _dotList;       set => _dotList = value; }
+        private IDictionary<int, Dot> dictIndex;
+
+        public  List<Dot> DotList              { get =>  _dotList; set => _dotList  = value; }
+        public IDictionary<int, Dot> DictIndex { get => dictIndex; set => dictIndex = value; }
 
         public int SourceSize() 
             //считает размер с учётом исходных кратностей персистентной диаграммы
@@ -20,9 +24,27 @@ namespace BottleneckEfratKatz
             int i = 0;
             foreach (Dot dot in DotList)
             {
-                i += dot.SourceMult;
+                i += dot.SourceMult;               
             }
             return i;
+        }
+
+        public void BuildDictIndex()
+            //строит словарь {целочисленный индекс : точка}
+            //присваивает каждой точке индексы, которые ей соответствуют в зависимости от кратности dot.SetOfIndex = {int1, int2 ...}
+        {
+            var resultDict = new Dictionary<int, Dot>();
+            int i = 1;
+            foreach (Dot dot in DotList)
+            {
+                for (int j = 0; j < dot.SourceMult; j++)
+                {
+                    DictIndex[i] = dot;
+                    dot.SetOfIndex.Add(i);
+                    i++;
+                }
+            }
+            return;
         }
 
         public int indexOfBirthDeath(double birth, double death) 

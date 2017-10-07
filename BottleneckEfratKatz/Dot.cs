@@ -12,12 +12,14 @@ namespace BottleneckEfratKatz
             DeathTime = death;
             SourceMult = mult;
             ProjectedFrom = new List<Dot>(); ///по умолчанию точка - не с диагонали, если да - то список будет заполняться при проецировании дургих точек на диагональную
+            SetOfIndex = new HashSet<int>();
         }
 
         private double _birthTime;
         private double _deathTime;
         private int _sourceMult; ///исходная кратность
         private int _currMult;  ///текущая кратность
+        private HashSet<int> setOfIndex;
 
         private List<Dot> _projectedFrom; /// если пустой, то это точка не с диагонали
                                          /// если не пустой - то точка с диагонали, а элементы - те точки, проекцией которых она является
@@ -31,6 +33,7 @@ namespace BottleneckEfratKatz
         public double DeathTime        { get => _deathTime;     set => _deathTime     = value; }
         public int    CurrMult         { get => _currMult;      set => _currMult      = value; }
         public List<Dot> ProjectedFrom { get => _projectedFrom; set => _projectedFrom = value; }
+        public HashSet<int> SetOfIndex { get => setOfIndex;     set =>  setOfIndex    = value; }
 
         public static double Distance(Dot parent, Dot inherior)
         {
