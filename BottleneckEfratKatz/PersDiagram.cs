@@ -10,13 +10,16 @@ namespace BottleneckEfratKatz
         {
             DotList = new List<Dot>(); //тут стоит использовать массив
             DictIndex = new Dictionary<int, Dot>(); ///словарь { целочисленный индекс : точка}
+            FullSetOfIndex = new HashSet<int>();
         }
 
         private List<Dot> _dotList; /// список точек с кратностями
         private IDictionary<int, Dot> dictIndex;
+        private HashSet<int> fullSetOfIndex;
 
-        public  List<Dot> DotList              { get =>  _dotList; set => _dotList  = value; }
-        public IDictionary<int, Dot> DictIndex { get => dictIndex; set => dictIndex = value; }
+        public  List<Dot> DotList              { get =>  _dotList;      set => _dotList       = value; }
+        public IDictionary<int, Dot> DictIndex { get => dictIndex;      set => dictIndex      = value; }
+        public HashSet<int> FullSetOfIndex     { get => fullSetOfIndex; set => fullSetOfIndex = value; }
 
         public int SourceSize() 
             //считает размер с учётом исходных кратностей персистентной диаграммы
@@ -29,18 +32,19 @@ namespace BottleneckEfratKatz
             return i;
         }
 
-        public void BuildDictIndex()
+        public void BuildDictIndex(int firstIndex = 1)
             //строит словарь {целочисленный индекс : точка}
             //присваивает каждой точке индексы, которые ей соответствуют в зависимости от кратности dot.SetOfIndex = {int1, int2 ...}
         {
             var resultDict = new Dictionary<int, Dot>();
-            int i = 1;
+            int i = firstIndex;
             foreach (Dot dot in DotList)
             {
                 for (int j = 0; j < dot.SourceMult; j++)
                 {
                     DictIndex[i] = dot;
                     dot.SetOfIndex.Add(i);
+                    FullSetOfIndex.Add(i);
                     i++;
                 }
             }

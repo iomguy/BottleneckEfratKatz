@@ -46,6 +46,7 @@
     <Compile Include="BinarySearch.cs" />
     <Compile Include="Dot.cs" />
     <Compile Include="Graph.cs" />
+    <Compile Include="HopcroftKarp.cs" />
     <Compile Include="PersDiagram.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
