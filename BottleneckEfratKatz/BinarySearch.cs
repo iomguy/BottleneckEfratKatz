@@ -8,23 +8,34 @@ namespace BinSearch
 {
     class BinS
     {
-        //static void Main(string[] args)
+        //public static Func<double, bool> LoopDelegate = Loop;
+
+        //private static bool Loop(double y)
         //{
-        //    Func<int, bool> LoopDelegate = Loop;
-
-        //    List<int> a = new List<int>() { 1, 3, 5, 7, 9 };
-        //    Console.WriteLine("Ищем  6: {0}", BinarySearch(a, LoopDelegate));
-        //    Console.ReadLine();
+        //    bool answer = (0.02 <= y) ? true : false;
+        //    return answer;
         //}
-        public static Func<double, bool> LoopDelegate = Loop;
 
-        private static bool Loop(double y)
+        public static Func<BottleneckEfratKatz.Dist, int, bool> LoopDelegate = Loop;
+
+        private static bool Loop(BottleneckEfratKatz.Dist PersDiagrs, int i)
         {
-            bool answer = (0.02 <= y) ? true : false;
-            return answer;
+            try
+            {
+                var graphGdistI = new BottleneckEfratKatz.BipartiteGraph();
+                graphGdistI.BuildGraphGdistI(PersDiagrs.graphG, i); //возможно, нужно будет унаследовать отдельный тип для graphGdistI и хранить при нём значение i
+                
+                var matches = BottleneckEfratKatz.HopcroftKarp.HopcroftKarpFunction(PersDiagrs.lefts, PersDiagrs.rights, graphGdistI);
+                bool answer = (matches.Count == PersDiagrs._inpAcupBsize) ? true : false;
+                return answer;
+            }
+            catch
+            {
+                bool answer = false;
+                return answer;
+            }                       
+            
         }
-
-        //delegate bool LoopDelegate();
 
         /// <summary>
         /// Бинарный поиск в отсортированном массиве.
@@ -32,13 +43,15 @@ namespace BinSearch
         /// <param name="a">Отсортированный по возрастанию массив типа int[]</param>
         /// <param name="x">Искомый элемент.</param>
         /// <returns>Возвращает индекс искомого элемента либо null, если элемент не найден.</returns>
-        public static int? BinarySearch(List<double> a, Func<double, bool> Loop)
+        public static int? BinarySearch(BottleneckEfratKatz.Dist PersDiagrs, Func<BottleneckEfratKatz.Dist, int, bool> Loop)
         {
             // Проверить, имеет ли смыл вообще выполнять поиск:
             // - если длина массива равна нулю - искать нечего;
             // - если искомый элемент меньше первого элемента массива, значит, его в массиве нет;
             // - если искомый элемент больше последнего элемента массива, значит, его в массиве нет.
             // if ((a.Count == 0) || (x < a[0]) || (x > a[a.Count - 1]))
+            List<double> a = PersDiagrs.graphG.DistI;
+
             if (a.Count == 0)
                 return null;
 
@@ -54,7 +67,7 @@ namespace BinSearch
                 int mid = first + (last - first) / 2;
 
                 //if (x <= a[mid])
-                if (Loop(a[mid]))
+                if (Loop(PersDiagrs, mid))
                     last = mid;
                 else
                     first = mid + 1;

@@ -28,10 +28,11 @@ namespace BottleneckEfratKatz
             BcupA.BuildDictIndex(_inpAcupBsize + 1);
 
             graphG = new BipartiteGraph();
-            graphG.BuildAllDistGraph(AcupB, BcupA); ///строим граф связей и размеров из всез точек AcupB во все точки BcupA
-            graphGdistI = new BipartiteGraph();
-            graphGdistI.BuildGraphGdistI(graphG, 140); //возможно, нужно будет унаследовать отдельный тип для graphGdistI и хранить при нём значение i
-            int? index = BinS.BinarySearch(graphG.DistI, BinS.LoopDelegate); //ищем в списке возможных дистанций ту, которая удовлетворяет условию LoopDelegate
+            graphG.BuildAllDistGraph(AcupB, BcupA); ///строим граф связей и размеров из всез точек AcupB во все точки BcupA            
+
+            lefts  = AcupB.FullSetOfIndex;
+            rights = BcupA.FullSetOfIndex;
+            //int? index = BinS.BinarySearch(graphG.DistI, BinS.LoopDelegate); //ищем в списке возможных дистанций ту, которая удовлетворяет условию LoopDelegate
 
         }             
 
@@ -42,6 +43,9 @@ namespace BottleneckEfratKatz
         public int _inpBsize;
         public int _inpAcupBsize;
         public int _inpBcupAsize;
+
+        public HashSet<int> lefts;
+        public HashSet<int> rights;
 
         PersDiagram _inpA;
         PersDiagram _inpB;
@@ -62,30 +66,35 @@ namespace BottleneckEfratKatz
             Console.WriteLine("Hello World!");
             Dist PersDiagrs = new Dist(args[0], args[1]);
 
+            //var graphGdistI = new BipartiteGraph();
+            //graphGdistI.BuildGraphGdistI(PersDiagrs.graphG, 174); //возможно, нужно будет унаследовать отдельный тип для graphGdistI и хранить при нём значение i
+
+            //var matches = HopcroftKarp.HopcroftKarpFunction(PersDiagrs.lefts, PersDiagrs.rights, graphGdistI);
+            int? index = BinS.BinarySearch(PersDiagrs, BinS.LoopDelegate);
+            int realindex = index ?? default(int);
+            Console.WriteLine($"Distance between persistenet diagrams is {PersDiagrs.graphG.DistI[realindex]}\n");
+
             //var lefts = new HashSet<int> { 1, 2, 3, 4, 5 };
             //var rights = new HashSet<int> { 6, 7, 8, 9, 10 };
+            //var edges = new Dictionary<int, HashSet<int>>
+            //{
+            //    [1] = new HashSet<int> { 163367, 163368 },
+            //    [2] = new HashSet<int> { 163379, 163378 },
+            //    [3] = new HashSet<int> { 163390, 163451 },
+            //    [4] = new HashSet<int> { 163561, 164555 },
+            //    [5] = new HashSet<int> { 164557, 164556 }
+            //};
 
-            var lefts  = PersDiagrs.AcupB.FullSetOfIndex;
-            var rights = PersDiagrs.BcupA.FullSetOfIndex;
+            //var lefts = PersDiagrs.AcupB.FullSetOfIndex;
+            //var rights = PersDiagrs.BcupA.FullSetOfIndex;
+            //var matches = HopcroftKarp.HopcroftKarpFunction(lefts, rights, PersDiagrs.graphGdistI);
 
+            //Console.WriteLine($"# of matches: {matches.Count}\n");
 
-            var edges = new Dictionary<int, HashSet<int>>
-            {
-                [1] = new HashSet<int> { 163367, 163368 },
-                [2] = new HashSet<int> { 163379, 163378 },
-                [3] = new HashSet<int> { 163390, 163451 },
-                [4] = new HashSet<int> { 163561, 164555 },
-                [5] = new HashSet<int> { 164557, 164556 }
-            };
-
-            var matches = HopcroftKarp.HopcroftKarpFunction(lefts, rights, PersDiagrs.graphGdistI);
-
-            Console.WriteLine($"# of matches: {matches.Count}\n");
-
-            foreach (var match in matches)
-            {
-                Console.WriteLine($"Match: {match.Key} -> {match.Value}");
-            }
+            //foreach (var match in matches)
+            //{
+            //    Console.WriteLine($"Match: {match.Key} -> {match.Value}");
+            //}
         }
     }
 }
